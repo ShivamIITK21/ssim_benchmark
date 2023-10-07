@@ -403,4 +403,4 @@ class MS_SSIM(torch.nn.Module):
 
 
 if __name__ == "__main__":
-    print("Hello")
+    
