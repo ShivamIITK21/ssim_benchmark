@@ -1,7 +1,7 @@
 # Copyright 2020 by Gongfan Fang, Zhejiang University.
 # All rights reserved.
 import warnings
-
+import time
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -16,8 +16,9 @@ def _fspecial_gauss_1d(size, sigma):
     """
     coords = torch.arange(size).to(dtype=torch.float)
     coords -= size // 2
-
+    # print(coords)
     g = torch.exp(-(coords ** 2) / (2 * sigma ** 2))
+    print(g)
     g /= g.sum()
 
     return g.unsqueeze(0).unsqueeze(0)
@@ -403,4 +404,13 @@ class MS_SSIM(torch.nn.Module):
 
 
 if __name__ == "__main__":
-    
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    # start = time.time()
+    # for i in range(0, 10):
+    #     t1 = torch.rand(32, 3, 128, 128).to(device)
+    #     t2 = torch.rand(32, 3, 128, 128).to(device)
+    #     print(ssim(t1, t2))
+    # end = time.time()
+    # print((end-start)/10)
+    print(_fspecial_gauss_1d(3, 0.5))
+
