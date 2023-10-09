@@ -41,7 +41,6 @@ def gaussian_filter(input, win):
     C = input.shape[1]
     out = input
     for i, s in enumerate(input.shape[2:]):
-        print(i,s)
         if s >= win.shape[-1]:
             out = conv(out, weight=win.transpose(2 + i, -1), stride=1, padding=0, groups=C)
         else:
@@ -154,20 +153,29 @@ def ssim(
 
 
 def test_gaussian():
+    torch.manual_seed(0)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    X = torch.rand(32, 3, 128, 128).to(device)
+    X = torch.rand(1, 3, 32, 32).to(device)
     win = _fspecial_gauss_1d(11, 1.5).to(device)
     win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
-    print(gaussian_filter(X, win).shape)
+    print(gaussian_filter(X, win))
+
+def ssim_test():
+    torch.manual_seed(0)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    X = torch.rand(1, 3, 32, 32).to(device)
+    Y = torch.rand(1, 3, 32, 32).to(device)
+    print(ssim(X, Y))
 
 
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    # start = time.time()
-    # for i in range(0, 10):
-    #      t1 = torch.rand(32, 3, 128, 128).to(device)
-    #      t2 = torch.rand(32, 3, 128, 128).to(device)
-    #      print(ssim(t1, t1))
-    # end = time.time()
-    # print((end-start)/10)
-    test_gaussian()
+    torch.manual_seed(0)
+    start = time.time()
+    for i in range(0, 1):
+         t1 = torch.rand(32, 3, 128, 128).to(device)
+         t2 = torch.rand(32, 3, 128, 128).to(device)
+         z = ssim(t1, t2)
+         print(z)
+    end = time.time()
+    print((end-start))
